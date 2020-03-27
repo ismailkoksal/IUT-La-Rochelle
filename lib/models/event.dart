@@ -36,8 +36,7 @@ class Event {
         dtend: DateTime.parse(json["dtend"]),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "uid": uid,
         "description": description.toJson(),
         "summary": summary,
