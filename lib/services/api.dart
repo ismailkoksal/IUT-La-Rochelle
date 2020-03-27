@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:edt_lr/ical.dart';
 import 'package:edt_lr/models/event.dart';
+import 'package:edt_lr/utils/ical.dart';
 import 'package:edt_lr/utils/net_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';

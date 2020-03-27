@@ -1,8 +1,13 @@
-import 'package:edt_lr/pages/chat.dart';
 import 'package:edt_lr/pages/login.dart';
+import 'package:edt_lr/pages/school_timetable.dart';
+import 'package:edt_lr/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  await Jiffy.locale("fr");
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -10,14 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(39, 125, 202, 1),
-        appBarTheme: AppBarTheme(elevation: 0.0),
-      ),
-      initialRoute: '/',
+      initialRoute: Routes.login,
       routes: {
-        '/': (context) => LoginPage(),
-        '/edt': (context) => ChatPage(),
+        Routes.login: (context) => LoginPage(),
+        Routes.timetable: (context) => SchoolTimetablePage(),
       },
     );
   }

@@ -15,8 +15,8 @@ class Event {
   Description description;
   String summary;
   String location;
-  String dtstart;
-  String dtend;
+  DateTime dtstart;
+  DateTime dtend;
 
   Event({
     this.uid,
@@ -32,17 +32,18 @@ class Event {
         description: Description.fromJson(json["description"]),
         summary: json["summary"],
         location: json["location"],
-        dtstart: json["dtstart"],
-        dtend: json["dtend"],
+        dtstart: DateTime.parse(json["dtstart"]),
+        dtend: DateTime.parse(json["dtend"]),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "uid": uid,
         "description": description.toJson(),
         "summary": summary,
         "location": location,
-        "dtstart": dtstart,
-        "dtend": dtend,
+        "dtstart": dtstart.toIso8601String(),
+        "dtend": dtend.toIso8601String(),
       };
 }
 

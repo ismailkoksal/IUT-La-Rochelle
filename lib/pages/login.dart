@@ -1,8 +1,9 @@
+import 'package:edt_lr/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api.dart';
+import '../services/api.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _username, _password;
 
   @override
@@ -18,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     Api.isLoggedIn().then((value) {
       if (value) {
-        Navigator.pushReplacementNamed(context, '/edt');
+        Navigator.pushReplacementNamed(context, Routes.timetable);
       }
     });
   }
@@ -26,11 +28,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(39, 125, 202, 1),
-      appBar: AppBar(
-        title: Text('Connexion'),
-      ),
-      body: SafeArea(
+      key: _scaffoldKey,
+      body: Container(
         child: Center(
           child: Form(
             key: _formKey,
@@ -57,6 +56,16 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(4278241023),
+              Color(4278219519),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -68,11 +77,14 @@ class _LoginPageState extends State<LoginPage> {
       if (value.data.toString().contains('CONNEXION ETABLIE')) {
         print(true);
         Api.getStudentGpuPage().then((value) {
-          _saveStudentDetails(value.toString())
-              .then((_) => Navigator.pushReplacementNamed(context, '/edt'));
+          _saveStudentDetails(value.toString()).then(
+              (_) => Navigator.pushReplacementNamed(context, Routes.timetable));
         });
       } else {
-        print(false);
+        final snackBar = SnackBar(
+            content: Text('Identifiant ou mot de passe incorrent'),
+            backgroundColor: Colors.redAccent);
+        _scaffoldKey.currentState.showSnackBar(snackBar);
       }
     });
   }
@@ -83,16 +95,13 @@ class _LoginPageState extends State<LoginPage> {
         htmlDoc.querySelector("input[name='etudiant']").parent.text;
     List<String> studentInfo = student.split(' ');
     String studentId = studentInfo[0];
-    String lastName = studentInfo[1];
-    String firstName = studentInfo[2];
+    String studentName = studentInfo.sublist(1).join(' ');
 
     print(studentId);
-    print(lastName);
-    print(firstName);
+    print(studentName);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('studentId', studentId);
-    await prefs.setString('lastName', lastName);
-    await prefs.setString('firstName', firstName);
+    await prefs.setString('studentName', studentName);
   }
 }
